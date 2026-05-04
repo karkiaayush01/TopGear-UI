@@ -1,8 +1,9 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
-import { useUser } from './contexts/UserContext';
+import { useUser } from './contexts/userContextCore';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 function App() {
   const { user, loading, refreshUser } = useUser();
@@ -26,6 +27,10 @@ function App() {
       <Route
         path="/home"
         element={user ? <HomePage user={user} /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/forgot-password"
+        element={user ? <Navigate to="/home"  replace /> : <ForgotPasswordPage />}
       />
       <Route path="*" element={<Navigate to={user ? '/home' : '/login'} replace />} />
     </Routes>

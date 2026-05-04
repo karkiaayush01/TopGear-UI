@@ -1,23 +1,25 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { User } from '../models/models';
 import { fetchMe } from '../api/api';
-
-type UserContextValue = {
-  user: User | null;
-  loading: boolean;
-  error: string | null;
-  refreshUser: () => Promise<void>;
-};
-
-const UserContext = createContext<UserContextValue | undefined>(undefined);
+import { hasValidAccessToken } from '../api/authToken';
+import { UserContext } from './userContextCore';
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => hasValidAccessToken());
+  const [fetched, setFetched] = useState(() => !hasValidAccessToken());
   const [error, setError] = useState<string | null>(null);
 
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
+    if (!hasValidAccessToken()) {
+      setUser(null);
+      setFetched(true);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -28,27 +30,24 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       setUser(null);
       setError(err instanceof Error ? err.message : 'Unable to load user');
     } finally {
+      setFetched(true);
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    refreshUser();
   }, []);
 
+  useEffect(() => {
+    if (fetched || !hasValidAccessToken()) return;
+
+    const timeoutId = window.setTimeout(() => {
+      void refreshUser();
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [fetched, refreshUser]);
+
   return (
-    <UserContext.Provider value={{ user, loading, error, refreshUser }}>
+    <UserContext.Provider value={{ user, loading, fetched, error, refreshUser }}>
       {children}
     </UserContext.Provider>
   );
-};
-
-export const useUser = (): UserContextValue => {
-  const context = useContext(UserContext);
-
-  if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
-
-  return context;
 };

@@ -5,7 +5,7 @@
   justify-items: center;
   gap: 16px;
   color: var(--text-h);
-  background: #f8f8f5;
+  background: var(--bg);
 }
 
 .app-status img {
@@ -17,7 +17,8 @@
   min-height: 100svh;
   padding: 40px;
   box-sizing: border-box;
-  background: #f8f8f5;
+  background: var(--bg);
+  color: var(--text-h);
 }
 
 .home-header {
@@ -25,6 +26,8 @@
   align-items: center;
   gap: 24px;
   text-align: left;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .eyebrow {
@@ -44,4 +47,10 @@
   margin: 0;
   font-size: 34px;
   letter-spacing: 0;
+}
+
+.home-title {
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
