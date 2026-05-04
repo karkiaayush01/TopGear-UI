@@ -5,6 +5,10 @@ export interface LoginResponse {
     role: string;
 }
 
+export interface MessageResponse {
+    message: string;
+}
+
 export interface SignupResponse {
     message: string;
     userId: string;

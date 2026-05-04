@@ -40,14 +40,14 @@ const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
 
   return (
     <form
-      className="flex w-full flex-col gap-[13px] rounded-[13px] border border-[rgba(255,179,0,0.32)] bg-[#0b0c0c] px-[31px] pb-[33px] pt-[30px] text-left max-[520px]:px-5 max-[520px]:pb-7 max-[520px]:pt-6"
+      className="flex w-full flex-col gap-[13px] rounded-[13px] border border-[var(--border)] bg-[var(--panel)] px-[31px] pb-[33px] pt-[30px] text-left shadow-[var(--shadow)] max-[520px]:px-5 max-[520px]:pb-7 max-[520px]:pt-6"
       onSubmit={handleSubmit}
     >
       <h1 id="login-title" className="sr-only">
         Sign in to TopGear
       </h1>
 
-      <label htmlFor="email" className="text-sm font-medium text-[#9aa1ad]">
+      <label htmlFor="email" className="text-sm font-medium text-[var(--text)]">
         Email address
       </label>
       <input
@@ -56,13 +56,13 @@ const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
         type="email"
         autoComplete="email"
         placeholder="Enter your email"
-        className="min-h-[41px] w-full rounded-md border border-[rgba(255,179,0,0.36)] bg-[#1a1a1a] px-3.5 py-2.5 font-bold text-[#f4f6f8] placeholder:text-[#7c838d] placeholder:opacity-70 focus:border-[var(--accent)] focus:outline-[3px_solid_rgba(255,179,0,0.14)]"
+        className="min-h-[41px] w-full rounded-md border border-[var(--border)] bg-[var(--field)] px-3.5 py-2.5 font-bold text-[var(--text-h)] placeholder:text-[var(--muted)] placeholder:opacity-70 focus:border-[var(--accent)] focus:outline-[3px_solid_rgba(255,179,0,0.14)]"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
         required
       />
 
-      <label htmlFor="password" className="text-sm font-medium text-[#9aa1ad]">
+      <label htmlFor="password" className="text-sm font-medium text-[var(--text)]">
         Password
       </label>
       <input
@@ -70,7 +70,7 @@ const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
         name="password"
         type="password"
         autoComplete="current-password"
-        className="min-h-[41px] w-full rounded-md border border-[rgba(255,179,0,0.36)] bg-[#1a1a1a] px-3.5 py-2.5 font-bold text-[#f4f6f8] placeholder:text-[#7c838d] placeholder:opacity-70 focus:border-[var(--accent)] focus:outline-[3px_solid_rgba(255,179,0,0.14)]"
+        className="min-h-[41px] w-full rounded-md border border-[var(--border)] bg-[var(--field)] px-3.5 py-2.5 font-bold text-[var(--text-h)] placeholder:text-[var(--muted)] placeholder:opacity-70 focus:border-[var(--accent)] focus:outline-[3px_solid_rgba(255,179,0,0.14)]"
         value={password}
         onChange={(event) => setPassword(event.target.value)}
         placeholder="Enter your password"

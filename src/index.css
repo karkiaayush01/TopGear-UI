@@ -1,11 +1,19 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --text: #555555;
-  --text-h: #000000;
+  --text-h: #111111;
   --bg: #f8f8f5;
+  --panel: #ffffff;
+  --field: #ffffff;
   --border: #e5e1d8;
   --accent: #ffb300;
+  --muted: #667085;
+  --toggle-bg: #ffffff;
+  --toggle-border: #ded7c9;
+  --toggle-text: #555555;
   --shadow:
     rgba(0, 0, 0, 0.1) 0 18px 40px -18px,
     rgba(0, 0, 0, 0.08) 0 8px 18px -12px;
@@ -24,12 +32,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.dark {
+  --text: #9aa1ad;
+  --text-h: #f4f6f8;
+  --bg: #080908;
+  --panel: #0b0c0c;
+  --field: #1a1a1a;
+  --border: rgba(255, 179, 0, 0.32);
+  --muted: #5f6b78;
+  --toggle-bg: #17191a;
+  --toggle-border: rgba(255, 179, 0, 0.32);
+  --toggle-text: #f4f6f8;
+  color-scheme: dark;
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  background: var(--bg);
 }
 
 button,

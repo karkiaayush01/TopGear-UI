@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import type { User } from "../models/models";
-import type { LoginRequest, SignupRequest } from "../models/requestModels";
-import type { LoginResponse, SignupResponse } from "../models/responseModels";
+import type { ForgotPasswordRequest, LoginRequest, ResetPasswordRequest, SignupRequest } from "../models/requestModels";
+import type { LoginResponse, MessageResponse, SignupResponse } from "../models/responseModels";
 import { getHeaders } from "./apiUtils";
 import { CONFIG } from "../config";
 
@@ -51,6 +51,40 @@ export const signup = async (data: SignupRequest): Promise<SignupResponse> => {
   }
 
   return response.json();
+};
+
+export const requestForgotPasswordCode = async (data: ForgotPasswordRequest): Promise<MessageResponse> => {
+  const searchParams = new URLSearchParams({ email: data.email });
+
+  const response = await fetch(`${API_URL}/auth/forgot-password?${searchParams.toString()}`, {
+    method: "POST",
+    headers: getHeaders(),
+  });
+
+  if (!response.ok) {
+    throw new Error(await getApiError(response, "Failed to send reset code"));
+  }
+
+  return response.json();
+};
+
+export const resetPassword = async (data: ResetPasswordRequest): Promise<string> => {
+  const response = await fetch(`${API_URL}/auth/reset-password`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error(await getApiError(response, "Failed to reset password"));
+  }
+
+  const contentType = response.headers.get("Content-Type");
+  if (contentType?.includes("application/json")) {
+    return response.json();
+  }
+
+  return response.text();
 };
 
 export const logout = (): void => {
