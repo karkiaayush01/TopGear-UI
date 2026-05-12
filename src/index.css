@@ -10,6 +10,7 @@
   --field: #ffffff;
   --border: #e5e1d8;
   --accent: #ffb300;
+  --accent-hover: #e6a100;
   --muted: #667085;
   --toggle-bg: #ffffff;
   --toggle-border: #ded7c9;
@@ -39,6 +40,8 @@
   --panel: #0b0c0c;
   --field: #1a1a1a;
   --border: rgba(255, 179, 0, 0.32);
+  --accent: #ffb300;
+  --accent-hover: #cc9900;
   --muted: #5f6b78;
   --toggle-bg: #17191a;
   --toggle-border: rgba(255, 179, 0, 0.32);
