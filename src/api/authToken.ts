@@ -2,6 +2,10 @@ import Cookies from 'js-cookie';
 
 type JwtPayload = {
   exp?: number;
+  sub?: string;
+  email?: string;
+  role?: string;
+  'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'?: string;
 };
 
 const base64UrlToJson = (value: string): unknown => {
@@ -17,25 +21,44 @@ const base64UrlToJson = (value: string): unknown => {
   return JSON.parse(json);
 };
 
-export const hasValidAccessToken = (): boolean => {
+const decodeToken = (): JwtPayload | null => {
   const accessToken = Cookies.get('accessToken');
-  if (!accessToken) return false;
-
+  if (!accessToken) return null;
   try {
     const [, payload] = accessToken.split('.');
-    if (!payload) return false;
-
-    const decodedPayload = base64UrlToJson(payload) as JwtPayload;
-    const isExpired = decodedPayload.exp ? decodedPayload.exp * 1000 <= Date.now() : false;
-
-    if (isExpired) {
-      Cookies.remove('accessToken');
-      return false;
-    }
-
-    return true;
+    if (!payload) return null;
+    return base64UrlToJson(payload) as JwtPayload;
   } catch {
+    return null;
+  }
+};
+
+export const hasValidAccessToken = (): boolean => {
+  const payload = decodeToken();
+  if (!payload) {
     Cookies.remove('accessToken');
     return false;
   }
+
+  const isExpired = payload.exp ? payload.exp * 1000 <= Date.now() : false;
+  if (isExpired) {
+    Cookies.remove('accessToken');
+    return false;
+  }
+
+  return true;
+};
+
+export type UserRole = 'Admin' | 'Staff' | 'Customer';
+
+export const getTokenRole = (): UserRole | null => {
+  const payload = decodeToken();
+  if (!payload) return null;
+
+  const raw =
+    payload.role ??
+    payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+  if (raw === 'Admin' || raw === 'Staff' || raw === 'Customer') return raw;
+  return null;
 };

@@ -7,6 +7,7 @@ export type UserContextValue = {
   fetched: boolean;
   error: string | null;
   refreshUser: () => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 export const UserContext = createContext<UserContextValue | undefined>(undefined);

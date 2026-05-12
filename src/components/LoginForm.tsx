@@ -88,6 +88,11 @@ const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
       <a href="/forgot-password" className="mt-0.5 self-center text-sm font-bold text-[#ffad1a] no-underline">
         Forgot password?
       </a>
+
+      <p className="self-center text-sm font-medium text-[var(--text)]">
+        New customer?{' '}
+        <a href="/signup" className="font-bold text-[#ffad1a] no-underline">Create account</a>
+      </p>
     </form>
   );
 };

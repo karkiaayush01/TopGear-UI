@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { User } from '../models/models';
-import { fetchMe } from '../api/api';
-import { hasValidAccessToken } from '../api/authToken';
+import { fetchMe, logout as apiLogout } from '../api/api';
+import { getTokenRole, hasValidAccessToken } from '../api/authToken';
 import { UserContext } from './userContextCore';
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
@@ -24,8 +24,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
 
     try {
-      const currentUser = await fetchMe();
-      setUser(currentUser);
+      const me = await fetchMe();
+      const role = getTokenRole() ?? 'Customer';
+      setUser({ ...me, role });
     } catch (err) {
       setUser(null);
       setError(err instanceof Error ? err.message : 'Unable to load user');
@@ -33,6 +34,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       setFetched(true);
       setLoading(false);
     }
+  }, []);
+
+  const logout = useCallback(async () => {
+    apiLogout();
+    setUser(null);
+    setError(null);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -46,7 +54,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }, [fetched, refreshUser]);
 
   return (
-    <UserContext.Provider value={{ user, loading, fetched, error, refreshUser }}>
+    <UserContext.Provider value={{ user, loading, fetched, error, refreshUser, logout }}>
       {children}
     </UserContext.Provider>
   );
