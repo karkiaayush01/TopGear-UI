@@ -2,15 +2,17 @@ import Cookies from "js-cookie";
 
 /**
  * Get the headers needed to call the API
- * @param contentType accepts custom ContentType and applies to header. Defaults to Application/json
+ * @param contentType accepts custom ContentType and applies to header. Defaults to Application/json. Pass empty string to skip.
  * @returns
  */
 export function getHeaders(contentType: string = "application/json"): Headers {
   const accessToken = Cookies.get("accessToken");
 
-  const headers: Record<string, string> = {
-    "Content-Type": contentType,
-  };
+  const headers: Record<string, string> = {};
+
+  if (contentType) {
+    headers["Content-Type"] = contentType;
+  }
 
   if (accessToken) {
     headers["Authorization"] = `Bearer ${accessToken}`;
