@@ -232,9 +232,11 @@ const InventoryPage = ({ user }: InventoryPageProps) => {
             const lowStock = part.quantity < 10;
             return (
               <div key={part.partId} className="part-card">
-                {part.imageUrl && (
-                  <img src={part.imageUrl} alt={part.partName ?? part.description} className="part-image" />
-                )}
+                <img
+                  src={part.imageUrl || '/logo/TopGearInitials.png'}
+                  alt={part.partName ?? part.description}
+                  className={`part-image${!part.imageUrl ? ' part-image-placeholder' : ''}`}
+                />
                 <div className="part-info">
                   <h3>{part.partName ?? part.description}</h3>
                   <p className="muted">{part.description}</p>

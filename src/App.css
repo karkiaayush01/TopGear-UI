@@ -366,6 +366,12 @@
   object-fit: cover;
 }
 
+.part-image-placeholder {
+  object-fit: contain;
+  padding: 32px;
+  background: var(--panel-alt, #f0f0f0);
+}
+
 .part-info {
   padding: 16px;
 }

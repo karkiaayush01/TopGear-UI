@@ -53,14 +53,13 @@ export interface Staff {
 
 export interface Part {
     partId: string;
-    purchasePrice: string;
+    partName: string;
     partPrice: number;
     sellingPrice: number;
     quantity: number;
     vendorId: string;
     vendorName: string;
     description: string;
-    partName?: string;
     vehicleType: VehicleType;
     imageUrl: string;
 }

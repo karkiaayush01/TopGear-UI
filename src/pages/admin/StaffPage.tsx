@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
-import { Pause, Plus, Trash2 } from 'lucide-react';
+import { Pause, Play, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { deactivateStaff, deleteStaff, getAllStaff, registerStaff } from '../../api/api';
+import { activateStaff, deactivateStaff, deleteStaff, getAllStaff, registerStaff } from '../../api/api';
 import { UserAccountStatus, type Staff } from '../../models/models';
 
 const initialForm = {
@@ -94,6 +94,20 @@ const StaffPage = () => {
     }
   };
 
+  const handleActivate = async (s: Staff) => {
+    if (!window.confirm(`Activate ${s.fullName}?`)) return;
+    setBusyId(s.userId);
+    try {
+      await activateStaff(s.userId);
+      toast.success('Staff activated');
+      await load();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to activate staff');
+    } finally {
+      setBusyId(null);
+    }
+  };
+
   const handleDelete = async (s: Staff) => {
     if (!window.confirm(`Delete ${s.fullName}? This soft-deletes the account.`)) return;
     setBusyId(s.userId);
@@ -138,7 +152,8 @@ const StaffPage = () => {
             </thead>
             <tbody>
               {staff.map((s) => {
-                const canDeactivate = s.status === UserAccountStatus.Active;
+                const isActive = s.status === UserAccountStatus.Active;
+                const canToggle = s.status !== UserAccountStatus.Deleted;
                 const canDelete = s.status !== UserAccountStatus.Deleted;
                 const isBusy = busyId === s.userId;
                 return (
@@ -151,15 +166,27 @@ const StaffPage = () => {
                     </td>
                     <td>
                       <div className="table-actions">
-                        <button
-                          type="button"
-                          className="btn btn-ghost btn-sm"
-                          onClick={() => handleDeactivate(s)}
-                          disabled={!canDeactivate || isBusy}
-                          title={canDeactivate ? 'Deactivate account' : 'Already inactive'}
-                        >
-                          <Pause size={14} /> Deactivate
-                        </button>
+                        {isActive ? (
+                          <button
+                            type="button"
+                            className="btn btn-ghost btn-sm"
+                            onClick={() => handleDeactivate(s)}
+                            disabled={isBusy}
+                            title="Deactivate account"
+                          >
+                            <Pause size={14} /> Deactivate
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            className="btn btn-ghost btn-sm"
+                            onClick={() => handleActivate(s)}
+                            disabled={!canToggle || isBusy}
+                            title="Activate account"
+                          >
+                            <Play size={14} /> Activate
+                          </button>
+                        )}
                         <button
                           type="button"
                           className="btn btn-danger btn-sm"

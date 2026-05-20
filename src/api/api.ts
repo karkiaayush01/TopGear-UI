@@ -251,6 +251,13 @@ export const deactivateStaff = (staffId: string): Promise<MessageResponse> =>
     "Failed to deactivate staff",
   );
 
+export const activateStaff = (staffId: string): Promise<MessageResponse> =>
+  request<MessageResponse>(
+    `/staff/${staffId}/activate`,
+    { method: 'PATCH', headers: getHeaders() },
+    "Failed to activate staff",
+  );
+
 export const deleteStaff = (staffId: string): Promise<MessageResponse> =>
   request<MessageResponse>(
     `/staff/${staffId}`,

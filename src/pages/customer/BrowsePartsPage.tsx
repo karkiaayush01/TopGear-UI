@@ -180,9 +180,11 @@ const BrowsePartsPage = () => {
         <div className="parts-grid">
           {parts.map((p) => (
             <div key={p.partId} className="part-card">
-              {p.imageUrl && (
-                <img src={p.imageUrl} alt={p.partName ?? p.description} className="part-image" />
-              )}
+              <img
+                src={p.imageUrl || '/logo/TopGearInitials.png'}
+                alt={p.partName ?? p.description}
+                className={`part-image${!p.imageUrl ? ' part-image-placeholder' : ''}`}
+              />
               <div className="part-info">
                 <h3>{p.partName ?? p.description}</h3>
                 <p className="muted">{p.description}</p>
